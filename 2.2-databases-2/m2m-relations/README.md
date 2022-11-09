@@ -32,7 +32,7 @@
     <span class="badge {% if scope.is_main %}badge-primary{% else %}badge-secondary{% endif %}">{{ scope.tag.name }}</span>
 {% endfor %}
 ```
-
+ 
 ## Подсказки
 
 Чтобы реализовать на странице редактирования объекта
