@@ -11,8 +11,9 @@ from logistic.serializers import ProductSerializer, StockSerializer
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['title','description',]
+    filter_backends = [DjangoFilterBackend,SearchFilter]
+    filterset_fields = ['id',]
+    search_fields = ['title','description',]
     pagination_class = LimitOffsetPagination
     
 
