@@ -4,6 +4,7 @@ from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 
 from advertisements.models import Advertisement
+from advertisements.permissions import IsOwnerOrAdmin
 from advertisements.serializers import AdvertisementSerializer
 
 
@@ -14,8 +15,8 @@ class AdvertisementViewSet(ModelViewSet):
     #   сериализаторов и фильтров
     queryset = Advertisement.objects.all()
     serializer_class = AdvertisementSerializer
-    permission_classes = [IsAuthenticated]
-    throttle_classes = [AnonRateThrottle,UserRateThrottle]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin()]
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     filter_backends = [DjangoFilterBackend,]
     filterset_fields = ['created_at','status',]
 
@@ -24,6 +25,7 @@ class AdvertisementViewSet(ModelViewSet):
 
     def get_permissions(self):
         """Получение прав для действий."""
-        if self.action in ["create", "update", "partial_update"]:
+        if self.action == "create":
             return [IsAuthenticated()]
-        return []
+        elif self.action in ["update", "partial_update"]:
+            return [IsAuthenticated, IsOwnerOrAdmin()]

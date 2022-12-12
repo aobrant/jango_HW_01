@@ -1,10 +1,9 @@
-from rest_framework import BasePermission
+from rest_framework.permissions import BasePermission
 
 
 class IsOwnerOrAdmin(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method == 'GET':
+        if request.method == 'GET' or request.user.is_staff:
             return True
-        if request.user.username == 'admin':
-            return True
-        return request.user == obj.user
+
+        return request.user == obj.creator
