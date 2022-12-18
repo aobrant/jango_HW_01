@@ -70,18 +70,6 @@ def course_filtration_id(client, course_factory):
     assert response.status_code == 200
     assert response.data[0]['id'] == random_id
 
-@pytest.mark.django_db
-def course_filtration_id(client, course_factory):
-    # Arrange
-    course = course_factory(_quantity=10)
-
-
-    # Act
-    response = client.get(f'/api/v1/courses/{course.id}/')
-
-    # Assert
-    assert response.status_code == 200
-    assert response.data[0]['name'] == course.name
 
 @pytest.mark.django_db
 def course_create(client):
@@ -114,6 +102,7 @@ def course_delete(client, course_factory):
     # Arrange
     course = course_factory(_quantity=10)
 
+
     # Act
     retrieve_response = client.get(f'/api/v1/courses/{course.id}/')
     delete_response = client.delete(f'/api/v1/courses/{course.id}/')
@@ -121,7 +110,18 @@ def course_delete(client, course_factory):
     # Assert
     assert delete_response.status_code == 204
 
+@pytest.mark.django_db
+def course_name_filtrate(client, course_factory):
+     # Arrange
+     course = course_factory(_quantity=10)
+     random_name = [c.name for c in course][randint(0, 9)]
 
+     # Act
+     response = client.get(f'/api/v1/courses/{random_name}/')
+
+     # Assert
+     assert response.status_code == 200
+     assert response.data[0]['name'] == random_name
 
 
 
